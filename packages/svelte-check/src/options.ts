@@ -6,6 +6,7 @@ export interface SvelteCheckCliOptions {
     workspaceUri: URI;
     outputFormat: OutputFormat;
     watch: boolean;
+    preserveWatchOutput: boolean;
     tsconfig?: string;
     filePathsToIgnore: string[];
     failOnWarnings: boolean;
@@ -32,6 +33,11 @@ export function parseOptions(cb: (opts: SvelteCheckCliOptions) => any) {
         .option(
             '--watch',
             'Will not exit after one pass but keep watching files for changes and rerun diagnostics',
+            false
+        )
+        .option(
+            '--preserveWatchOutput',
+            'Do not clear the screen in watch mode',
             false
         )
         .option(
@@ -72,6 +78,7 @@ export function parseOptions(cb: (opts: SvelteCheckCliOptions) => any) {
                 workspaceUri,
                 outputFormat: getOutputFormat(opts),
                 watch: !!opts.watch,
+                preserveWatchOutput: !!opts.preserveWatchOutput,
                 tsconfig: getTsconfig(opts, workspaceUri.fsPath),
                 filePathsToIgnore: getFilepathsToIgnore(opts),
                 failOnWarnings: !!opts['fail-on-warnings'],
